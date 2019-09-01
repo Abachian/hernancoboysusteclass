@@ -6,13 +6,17 @@
 #include <list>
 #include <queue>
 #include <iostream>
-#include <pair>
 using namespace std;
 
 struct nodo{
 	int inicio;
 	int fin;
 	int padre;
+};
+
+struct par{
+	int a;
+	int b;
 };
 
 template <typename C> void comp_fuertemente_conectados (const Grafo<C> & g,nodo visitados[]){
@@ -71,7 +75,9 @@ template <typename C> void DFS(const Grafo<C> & Grafo_, int vertice, nodo visita
 	visitados[vertice].fin = tiempo;
 }
 
-template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,list<int> & route,list<int> & solucion, pair <int,int> evadir){
+
+
+template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,list<int> & route,list<int> & solucion, par evadir){
 	if ( vertice == destino ){
 		route.push_back(vertice);
 		solucion.insert(solucion.end(),route.begin(),route.end());
@@ -83,13 +89,14 @@ template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,li
 		typename list<typename Grafo<C>::Arco>::iterator it = adyacentes.begin();
 		while( it != adyacentes.end() ){
 			route.push_back(vertice);
-			if ((vertice!=evadir.first() && (*it).devolver_adyacente()!= evadir.second()) || (vertice!=evadir.second() && (*it).devolver_adyacente()!= evadir.first())  ){
+			if ( vertice!=evadir.a && vertice!=evadir.b ){
 				ejercicio8(g,(*it).devolver_adyacente(),destino,route,solucion,evadir);
 			}
 			route.pop_back();
 			it++;
 		}
 	}
+}
 
 
 
@@ -106,7 +113,6 @@ template<typename C>void routes_from_to(const Grafo<C>& g,int vertice,int destin
 		typename list<typename Grafo<C>::Arco>::iterator it = adyacentes.begin();
 		while( it != adyacentes.end() ){
 			route.push_back(vertice);
-			if ( )
 			routes_from_to (g,(*it).devolver_adyacente(),destino,route,solucion);
 			route.pop_back();
 			it++;
