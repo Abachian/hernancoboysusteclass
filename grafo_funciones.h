@@ -6,6 +6,7 @@
 #include <list>
 #include <queue>
 #include <iostream>
+#include <pair>
 using namespace std;
 
 struct nodo{
@@ -70,6 +71,29 @@ template <typename C> void DFS(const Grafo<C> & Grafo_, int vertice, nodo visita
 	visitados[vertice].fin = tiempo;
 }
 
+template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,list<int> & route,list<int> & solucion, pair <int,int> evadir){
+	if ( vertice == destino ){
+		route.push_back(vertice);
+		solucion.insert(solucion.end(),route.begin(),route.end());
+		route.pop_back();
+	}
+	else{
+		list<typename Grafo<C>::Arco> adyacentes;
+		g.devolver_adyacentes(vertice,adyacentes);
+		typename list<typename Grafo<C>::Arco>::iterator it = adyacentes.begin();
+		while( it != adyacentes.end() ){
+			route.push_back(vertice);
+			if ((vertice!=evadir.first() && (*it).devolver_adyacente()!= evadir.second()) || (vertice!=evadir.second() && (*it).devolver_adyacente()!= evadir.first())  ){
+				ejercicio8(g,(*it).devolver_adyacente(),destino,route,solucion,evadir);
+			}
+			route.pop_back();
+			it++;
+		}
+	}
+
+
+
+
 template<typename C>void routes_from_to(const Grafo<C>& g,int vertice,int destino,list<int> & route,list<int> & solucion){
 	if ( vertice == destino ){
 		route.push_back(vertice);
@@ -82,6 +106,7 @@ template<typename C>void routes_from_to(const Grafo<C>& g,int vertice,int destin
 		typename list<typename Grafo<C>::Arco>::iterator it = adyacentes.begin();
 		while( it != adyacentes.end() ){
 			route.push_back(vertice);
+			if ( )
 			routes_from_to (g,(*it).devolver_adyacente(),destino,route,solucion);
 			route.pop_back();
 			it++;
