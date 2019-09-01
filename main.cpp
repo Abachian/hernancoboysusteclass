@@ -2,10 +2,10 @@
 #include "grafo.h"
 #include <algorithm>
 #include <queue>
+#include <pair>
 #include <cassert>
 #include "iostream"
 #include "sets.h"
-
 using namespace std;
 
 void Imprimir_visitados(nodo visitados[],int n){
@@ -74,9 +74,15 @@ int main()
 
 	nodo visitados[g.devolver_longitud()+1];
 	Inicializar_visitados(visitados,g.devolver_longitud()+1);
-	comp_fuertemente_conectados(g,visitados);
-
-
+	//comp_fuertemente_conectados(g,visitados);
+	list <int> solucion;
+	list <int> route;
+	ejercicio8(g,1,7,route,solucion,pair <9,7>);
+	list <int>::const_iterator it;
+	for ( it=caminos.begin() ; it!=caminos.end() ; it++){
+		cout << (*it) << " ";
+		if ( (*it) == fin ){
+			cout << "\n";
 	// int color[g.devolver_longitud()+1];
 	// for ( int i=1 ; i <= g.devolver_longitud()+1 ; i++ ){
 	// 	color[i]=0;
@@ -115,7 +121,5 @@ int main()
 	// while ( !joya.empty() ){
 	// 	cout << "i: "<< i++ << joya.front() << " ";
 	// 	joya.pop();
-	// }
-
-
+	//
 }
