@@ -77,6 +77,7 @@ int main()
 	//comp_fuertemente_conectados(g,visitados);
 	list <int> solucion;
 	list <int> route;
+	std::cout << "jajaja" << '\n';
 	ejercicio8(g,1,7,route,solucion,pair <9,7>);
 	list <int>::const_iterator it;
 	for ( it=caminos.begin() ; it!=caminos.end() ; it++){
