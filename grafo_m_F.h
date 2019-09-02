@@ -3,18 +3,20 @@
 
 #include <map>
 #include <list>
+#include <vector>
 #include "iostream"
 
 using namespace std;
 
-template <typename C> int min (int a,int b){
+
+int min (int a,int b){
   if (a <= b){
     return a;
   }
   return b;
 }
 
-template <typename C> void inicMat(int m[][6]){
+void inicMat(vector<vector<int>> & m){
   m[1][2] = 3;
   m[1][3] = 5;
   m[1][4] = 1;
@@ -53,7 +55,8 @@ template <typename C> void inicMat(int m[][6]){
 
 }
 
-template <typename C> void Ej11(int m[][6],int dim){
+void Ej11( vector<vector<int> > & m){
+  int dim=6;
   for ( int k=1 ; k  <= dim ; k++ ){
     for ( int i=1 ; i <= dim ; i++ ){
       for ( int j=1 ; j<= dim ; j++){
