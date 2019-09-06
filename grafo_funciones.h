@@ -101,22 +101,26 @@ template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,li
 
 
 
-template<typename C>void routes_from_to(const Grafo<C>& g,int vertice,int destino,list<int> & route,list<int> & solucion){
+template<typename C>void routes_from_to(const Grafo<C>& g,int visitados[],int vertice,int destino,list<int> & route,list<list<int>> & solucion){
 	if ( vertice == destino ){
 		route.push_back(vertice);
-		solucion.insert(solucion.end(),route.begin(),route.end());
+		solucion.push_back(route);
 		route.pop_back();
 	}
 	else{
+		visitados[vertice] = 1;
 		list<typename Grafo<C>::Arco> adyacentes;
 		g.devolver_adyacentes(vertice,adyacentes);
 		typename list<typename Grafo<C>::Arco>::iterator it = adyacentes.begin();
-		while( it != adyacentes.end() ){
-			route.push_back(vertice);
-			routes_from_to (g,(*it).devolver_adyacente(),destino,route,solucion);
-			route.pop_back();
+		while ( it != adyacentes.end() ){
+			if ( visitados[(*it).devolver_adyacente()] == 0 ){
+				route.push_back(vertice);
+				routes_from_to (g,visitados,(*it).devolver_adyacente(),destino,route,solucion);
+				route.pop_back();
+			}
 			it++;
 		}
+		visitados[vertice] = 0;
 	}
 }
 
