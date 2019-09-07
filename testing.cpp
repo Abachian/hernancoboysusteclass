@@ -20,7 +20,6 @@ int main() {
 	g.agregar_vertice(7);
 	g.agregar_vertice(8);
 	g.agregar_vertice(9);
-	g.agregar_vertice(10);
 	// // // Luego los arcos
 	g.agregar_arco(1, 2, 3);
 	g.agregar_arco(1, 3, 9);
@@ -39,7 +38,7 @@ int main() {
   g.agregar_arco(8, 7, 1);
 
   // Pink_Floyd(g);
-  Pink_Floyd (g,1,7);
+  Kruskal(g);
 
   return 0;
 }

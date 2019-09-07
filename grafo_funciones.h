@@ -23,43 +23,61 @@ struct par{
 struct arcoplus{
 	int origen;
 	int destino;
-	bool marca;
+	int costo;
 };
 
-template <typename C> void Kruskal ( const Grafo<C> & g){
-	list <int> solucion;
-	typename list <arcoplus> Arcos;
-	typename list <Grafo<C>::Arco> Arcos_aux;
+template <typename C> void Kruskal ( const Grafo<C> & g ){
+	int Sum = 0;
+	list <arcoplus> solucion;
+	list <arcoplus> Arcos;
+	list <typename Grafo<C>::Arco> Arcos_aux;
 	int k = 1;
-	while ( k <= g.devolver_longitud() ){ //Ver los adyacentes de todos los vertices
+	while ( k <= (g.devolver_longitud()+1) ){ //Ver los adyacentes de todos los vertices
 		g.devolver_adyacentes(k,Arcos_aux);
-		typename list <Grafo<C>::Arco>::iterator it=Arcos_aux.begin();
+		typename list <typename Grafo<C>::Arco>::iterator it = Arcos_aux.begin();
 		while (it != Arcos_aux.end() ){
 			arcoplus arco;
+			arco.costo= (*it).devolver_costo();
 			arco.destino = (*it).devolver_adyacente();
 			arco.origen = k;
-			arco.marca = false;
 			Arcos.push_back(arco); ///Agrega todos ndeah
 			it++;
 		}
 		k++;
 	}
-	Sets(g.devolver_longitud()) Componentes; //Crea (longitud de grafo) compopnentes
-	typename list <Grafo<C>::arcoplus>::iterator it ;
-	while ( !Arcos.empty() ) //Mientras no queden componentes por eliminar
-		int MinCos = 999;
-		typename list <Grafo<C>::arcoplus>::iterator MinPos;
-		for ( it = Arcos.begin() ; it != Arcos.end() ; it++ ){
-			if ( (*it).Arco.devolver_costo() < MinCos ){
-				MinCos = (*it).Arco.devolver_costo();
-				MinPos = it;
+
+	Sets Componentes (g.devolver_longitud()); //Crea (longitud de grafo) compopnentes
+	list <arcoplus>::iterator it ;
+
+	int MinCos;
+	while ( !Arcos.empty() ){
+		MinCos= 999;
+		list <arcoplus>::iterator it_2;
+		list <arcoplus>::iterator MinPos;
+		for ( it_2 = Arcos.begin() ; it_2 != Arcos.end() ; it_2++ ){
+			if ( (*it_2).costo < MinCos ){
+				MinCos = (*it_2).costo;
+				MinPos = it_2;
 			}
 		}
-		if (Componentes.find((*MinPos).origen) != Componentes.find ((*MinPos).Arco.devolver_adyacente())){
-			Componentes.Union((*MinPos).origen,(*MinPos).Arco.devolver_adyacente());
-			solucion.push_back(arco);
+		if (Componentes.Find((*MinPos).origen) != Componentes.Find ((*MinPos).destino)){
+			Componentes.Union(Componentes.Find((*MinPos).origen),Componentes.Find((*MinPos).destino));
+			solucion.push_back((*MinPos));
 		}
-		Arcos_aux.erase(MinPos);
+		Arcos.erase(MinPos);
+	} //Mientras no queden componentes por eliminar
+	list <arcoplus>::iterator it_2;
+	cout << endl;
+	for ( it_2 = solucion.begin() ; it_2 != solucion.end() ; it_2++ ){
+		cout << (*it_2).origen << " ";
+		cout << (*it_2).destino << " ",
+		cout << "costo: "<<(*it_2).costo << " ",
+		cout << endl;
+		Sum += (*it_2).costo;
+	}
+	cout << endl;
+	cout << endl;
+	cout << Sum;
 }
 
 template <typename C> void Dijkstra ( const Grafo<C> & g , int vertice){
