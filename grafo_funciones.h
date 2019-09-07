@@ -20,6 +20,48 @@ struct par{
 	int b;
 };
 
+struct arcoplus{
+	int origen;
+	int destino;
+	bool marca;
+};
+
+template <typename C> void Kruskal ( const Grafo<C> & g){
+	list <int> solucion;
+	typename list <arcoplus> Arcos;
+	typename list <Grafo<C>::Arco> Arcos_aux;
+	int k = 1;
+	while ( k <= g.devolver_longitud() ){ //Ver los adyacentes de todos los vertices
+		g.devolver_adyacentes(k,Arcos_aux);
+		typename list <Grafo<C>::Arco>::iterator it=Arcos_aux.begin();
+		while (it != Arcos_aux.end() ){
+			arcoplus arco;
+			arco.destino = (*it).devolver_adyacente();
+			arco.origen = k;
+			arco.marca = false;
+			Arcos.push_back(arco); ///Agrega todos ndeah
+			it++;
+		}
+		k++;
+	}
+	Sets(g.devolver_longitud()) Componentes; //Crea (longitud de grafo) compopnentes
+	typename list <Grafo<C>::arcoplus>::iterator it ;
+	while ( !Arcos.empty() ) //Mientras no queden componentes por eliminar
+		int MinCos = 999;
+		typename list <Grafo<C>::arcoplus>::iterator MinPos;
+		for ( it = Arcos.begin() ; it != Arcos.end() ; it++ ){
+			if ( (*it).Arco.devolver_costo() < MinCos ){
+				MinCos = (*it).Arco.devolver_costo();
+				MinPos = it;
+			}
+		}
+		if (Componentes.find((*MinPos).origen) != Componentes.find ((*MinPos).Arco.devolver_adyacente())){
+			Componentes.Union((*MinPos).origen,(*MinPos).Arco.devolver_adyacente());
+			solucion.push_back(arco);
+		}
+		Arcos_aux.erase(MinPos);
+}
+
 template <typename C> void Dijkstra ( const Grafo<C> & g , int vertice){
 
 	int n = g.devolver_longitud();
@@ -210,9 +252,6 @@ template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,li
 	}
 }
 
-
-
-// solucion.insert(solucion.end(),route.begin(),route.end());
 
 template<typename C>void routes_from_to(const Grafo<C>& g,int visitados[],int vertice,int destino,list<int> & route,list<list<int>> & solucion){
 	if ( vertice == destino ){
