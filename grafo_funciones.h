@@ -26,6 +26,50 @@ struct arcoplus{
 	int costo;
 };
 
+template <typename C> void Prim ( const Grafo<C> & g , int origen, int cant_arc){
+	cout << "   Arcos del Arbol Libre:" << endl;
+	set<int> vertices;
+	vertices=g.devolver_vertices(vertices);
+	set<int> S;
+	list<arcoplus> T;
+	int minimos[cant_arc];
+	//int n = g.devolver_longitud();
+
+	while ( S != vertices){
+		S.insert(origen);
+		list <typename Grafo<C>::Arco> Arcos_aux;
+		g.devolver_adyacentes(origen,Arcos_aux);
+		typename list <typename Grafo<C>::Arco>::iterator it = Arcos_aux.begin();
+		typename list <typename Grafo<C>::Arco>::iterator it2;
+		int min=999;
+
+		for (it2 = Arcos_aux.begin(); it2 != Arcos_aux.end(); it2++ )
+		{
+			if (((*it2).devolver_costo() < min)  &&  (!pertenece((*it2).devolver_adyacente(),S) ) )
+			{
+				min=(*it2).devolver_costo();
+				it=it2;
+				//vertices.erase((*it2).devolver_adyacente());
+			}
+		}
+
+		arcoplus aux;
+		aux.origen=origen;
+		aux.destino=(*it).devolver_adyacente();
+		aux.costo=(*it).devolver_costo();
+		T.push_front(aux);
+
+		origen=(*it).devolver_adyacente();
+	}
+
+	cout << "   Arcos del Arbol Libre:" << endl;
+
+	for (list<arcoplus>:: iterator it = T.begin() ; it != T.end() ; it++ )
+	{
+		cout << " Origen: " << (*it).origen << "   Destino:" << (*it).destino << "   Costo:" << (*it).costo << endl;
+	}
+}
+
 template <typename C> void Kruskal ( const Grafo<C> & g ){
 	int Sum = 0;
 	list <arcoplus> solucion;
