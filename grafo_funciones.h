@@ -86,31 +86,32 @@ template <typename C> void Dijkstra ( const Grafo<C> & g , int vertice){
 	int calculado[n];
 	int distancia[n];
 	int padre[n];
-	int min= 9999999;
+	int min= 999;
 	int PosMin;
 	list <typename Grafo<C>::Arco> lista;
 
+	calculado[vertice] = 1;
 	distancia[vertice] = 0;
+	distancia[0] = min;
 
 	for ( int i=1;i<=n;i++){
-		calculado[i]=0;
-		padre[i]=0;
+		calculado[i]=0; //S
+		padre[i]=vertice; //P
 		distancia[i]=999;
 	}
 
-	for ( int i=1 ; i <= n ; i++ ){
+	for ( int i=1;i<=n;i++){
+		distancia[i] = g.costo_arco(vertice,i);
+	}
 
+	distancia[vertice] = 0;
+
+	for ( int k=1 ; k <= n ; k++ ){
+
+		min = 999;
 
 		for ( int j=1;j<=n;j++){
-			if (g.costo_arco(i,j) < distancia[j] ){
-				distancia[j] = g.costo_arco(i,j);
-			}
-		}
-
-		min = 9999999;
-
-		for ( int j=1;j<=n;j++){
-			if ( (distancia[j] < min) && calculado[j] == 0 ){
+			if ( (distancia[j] < min) && (calculado[j] == 0) ){
 				min = distancia[j];
 				PosMin = j;
 			}
@@ -122,29 +123,25 @@ template <typename C> void Dijkstra ( const Grafo<C> & g , int vertice){
 		typename list<typename Grafo<C>::Arco>::iterator it = lista.begin();
 		for ( it=lista.begin() ; it!=lista.end() ; it++ ){
 			if ( calculado[(*it).devolver_adyacente()] == 0 ){ //Si no fue procesado
-				if ( distancia[(*it).devolver_adyacente()] > distancia[PosMin] + g.costo_arco(PosMin,(*it).devolver_adyacente())){
+				if ( distancia[(*it).devolver_adyacente()] > (distancia[PosMin] + g.costo_arco(PosMin,(*it).devolver_adyacente()))){
 					distancia[(*it).devolver_adyacente()] = distancia[PosMin] + g.costo_arco(PosMin,(*it).devolver_adyacente());
-					padre[(*it).devolver_adyacente()] = (*it).devolver_adyacente();
+					padre[(*it).devolver_adyacente()] = PosMin;
 				}
 			}
 		}
 	}
-
-	cout << "1 2 3 4 5 6 7 8 9 10\n\n";
-
-	for ( int j=1;j<=n;j++){
-		cout << calculado[j] << " ";
+	for (int i = 2; i <= n; i++) {
+		cout << "\nEl camino minimo desde " << vertice << " a " << i << ": ";
+		int sum = 0;
+		int sig = padre[i];
+		while ( sig != vertice ){
+			cout << padre[i] << " ";
+			sum += distancia[i];
+			sig  =  padre[sig];
+		}
+		cout << endl;
+		cout << sum;
 	}
-	// std::cout << "\n" << '\n';
-	// for ( int j=1;j<=n;j++){
-	// 	cout << padre[j] << " ";
-	// }
-	std::cout << "\n" << '\n';
-
-	for ( int j=1;j<=n;j++){
-		cout << distancia[j] << " ";
-	}
-
 }
 
 template <typename C> void Pink_Floyd (const Grafo<C> & g,int origen,int destino){
@@ -152,37 +149,43 @@ template <typename C> void Pink_Floyd (const Grafo<C> & g,int origen,int destino
 	int m[u][u];
 	int p[u][u];
 
-	// for ( int j = 1 ; j <= u ; j++ ){
-	// 	for ( int i = 1 ; i <= u ; i++ ){
-	// 		p[i][j] = 0;
-	// 		m [i][j] = g.costo_arco(i,j);
-	// 	}
-	// }
-
-
-	for ( int k = 0 ; k <= u ; k++ ){
-		for ( int i = 0 ; i <= u ; i++ ){
-			for ( int j = 0 ; j <= u ; j++ ){
-				int a = g.costo_arco(i,k) + g.costo_arco(k,j);
-				int b = g.costo_arco(i,j);
-				if ( a < b ){
-					m[i][j] = a;
-					p[i][j] = k;
-				}
-				else{
-					p[i][j] = 0;
-					m[i][j] = b;
-				}
-			}
+	for ( int j = 1 ; j <= u ; j++ ){
+		for ( int i = 1 ; i <= u ; i++ ){
+			p[j][i] = 0;
+			m[j][i] = g.costo_arco(j,i);
 		}
 	}
 
-	// for ( int i = 1 ; i <= u ; i++ ){
-	// 	for ( int j = 1 ; j <= u ; j++ ){
-	// 		cout << p[i][j] << " ";
-	// 		}
-	// 	cout << "\n";
-	// }
+	for ( int j = 1 ; j <= u ; j++ ){
+		for ( int i = 1 ; i <= u ; i++ ){
+			cout << m[j][i] << " ";
+		}
+		cout << endl;
+	}
+
+
+	for ( int k = 1 ; k <= u ; k++ ){
+		for ( int i = 1 ; i <= u ; i++ ){
+			for ( int j = 1 ; j <= u ; j++ ){
+				cout << p[i][j] << " ";
+				int a = g.costo_arco(i,k) + g.costo_arco(k,j);
+				int b = m[i][j];
+				if ( a < b ){
+					m[i][j] = a;
+					p[i][j] = k;
+					cout << p[i][j] << " ";
+				}
+			}
+			cout << endl;
+		}
+	}
+
+	for ( int i = 1 ; i <= u ; i++ ){
+		for ( int j = 1 ; j <= u ; j++ ){
+			cout << p[i][j] << " ";
+			}
+		cout << "\n";
+	}
 	// int n = p[origen][destino];
 	// while ( n != 0 ){
 	// 	cout << n;
@@ -247,8 +250,6 @@ template <typename C> void DFS(const Grafo<C> & Grafo_, int vertice, nodo visita
 	visitados[vertice].fin = tiempo;
 }
 
-
-
 template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,list<int> & route,list<int> & solucion, par evadir){
 	if ( vertice == destino ){
 		route.push_back(vertice);
@@ -270,7 +271,6 @@ template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,li
 	}
 }
 
-
 template<typename C>void routes_from_to(const Grafo<C>& g,int visitados[],int vertice,int destino,list<int> & route,list<list<int>> & solucion){
 	if ( vertice == destino ){
 		route.push_back(vertice);
@@ -291,27 +291,6 @@ template<typename C>void routes_from_to(const Grafo<C>& g,int visitados[],int ve
 			it++;
 		}
 		visitados[vertice] = 0;
-	}
-}
-
-template<typename C>void routes_w_avoid(const Grafo<C>& g,int vertice,int destino,int avoid,list<int> & route,list<int> & solucion){
-	if ( vertice == destino ){
-		route.push_back(vertice);
-		solucion.insert(solucion.end(),route.begin(),route.end());
-		route.pop_back();
-	}
-	else{
-		list<typename Grafo<C>::Arco> adyacentes;
-		g.devolver_adyacentes(vertice,adyacentes);
-		typename list<typename Grafo<C>::Arco>::iterator it = adyacentes.begin();
-		while( it != adyacentes.end() ){
-			route.push_back(vertice);
-			if ( (*it).devolver_adyacente() != avoid ){
-				routes_w_avoid (g,(*it).devolver_adyacente(),destino,avoid,route,solucion);
-			}
-			route.pop_back();
-			it++;
-		}
 	}
 }
 

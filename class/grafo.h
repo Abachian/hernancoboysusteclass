@@ -152,9 +152,10 @@ template <typename C> const C & Grafo<C>::costo_arco(int origen, int destino) co
 		typename map<int,C>::const_iterator it_ = it->second.find(destino);
 		if ( it_ != it->second.end() ){
 			return (*it_).second;
+
 		}
 	}
-	return aux;	
+	return aux;
 }
 
 template <typename C> void Grafo<C>::devolver_vertices(list<int> & vertices) const

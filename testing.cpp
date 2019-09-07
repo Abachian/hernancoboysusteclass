@@ -37,8 +37,10 @@ int main() {
   g.agregar_arco(6, 7, 3);
   g.agregar_arco(8, 7, 1);
 
-  // Pink_Floyd(g);
-  Kruskal(g);
+
+  Dijkstra (g,1);
+  // Pink_Floyd(g,1,7);
+  // Kruskal(g);
 
   return 0;
 }
