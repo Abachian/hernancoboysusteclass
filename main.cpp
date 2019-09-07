@@ -1,10 +1,17 @@
 #include "grafo_funciones.h"
-#include "grafo.h"
+#include "class/grafo.h"
 #include <algorithm>
 #include <queue>
 #include "iostream"
-#include "sets.h"
+#include "class/sets.h"
 using namespace std;
+
+void Imprimir_visitados (list<int> n){
+	list<int>::const_iterator it = n.begin();
+	for ( it=n.begin() ; it!=n.end() ; it++){
+		cout << (*it) << " ";
+	}
+}
 
 void Imprimir_visitados(nodo visitados[],int n){
 	for (int i=1 ; i<n ; i++ ){
@@ -70,28 +77,47 @@ int main()
 
 	cout << g << "\n\n";
 
-	nodo visitados[g.devolver_longitud()+1];
-	Inicializar_visitados(visitados,g.devolver_longitud()+1);
-	//comp_fuertemente_conectados(g,visitados);
-	list <int> solucion;
-	list <int> route;
+	int visitados[g.devolver_longitud()+1];
+	list < int > route;
+	list < list < int > > solucion;
 
-
-
-
-	par evitar;
-	evitar.a = 6;
-	evitar.b = 7;
-
-	ejercicio8(g,1,7,route,solucion,evitar);
-	list <int>::const_iterator it;
-	for ( it=solucion.begin() ; it!=solucion.end() ; it++){
-		cout << (*it) << " ";
-		if ( (*it) == 7 ){
-			cout << "\n";
-		}
+	int n = 0;
+	while ( n <= g.devolver_longitud()+1 ){
+		visitados[n++] = 0;
 	}
-	std::cout << "\n\n" << '\n';
+
+	routes_from_to(g,visitados,1,7,route,solucion);
+
+	list < list < int > >::const_iterator it;
+	cout << solucion.size() << "\n\n";
+	for ( it=solucion.begin() ; it!=solucion.end() ; it++){
+		Imprimir_visitados((*it));
+		cout << "\n";
+	}
+
+
+	// nodo visitados[g.devolver_longitud()+1];
+	// Inicializar_visitados(visitados,g.devolver_longitud()+1);
+	// //comp_fuertemente_conectados(g,visitados);
+	// list <int> solucion;
+	// list <int> route;
+	//
+	//
+	//
+	//
+	// par evitar;
+	// evitar.a = 6;
+	// evitar.b = 7;
+	//
+	// ejercicio8(g,1,7,route,solucion,evitar);
+	// list <int>::const_iterator it;
+	// for ( it=solucion.begin() ; it!=solucion.end() ; it++){
+	// 	cout << (*it) << " ";
+	// 	if ( (*it) == 7 ){
+	// 		cout << "\n";
+	// 	}
+	// }
+	// std::cout << "\n\n" << '\n';
 	// int color[g.devolver_longitud()+1];
 	// for ( int i=1 ; i <= g.devolver_longitud()+1 ; i++ ){
 	// 	color[i]=0;

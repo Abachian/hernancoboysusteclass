@@ -1,11 +1,12 @@
 #ifndef GRAFO_FUNCIONES_H_
 #define GRAFO_FUNCIONES_H_
 
-#include "grafo.h"
-#include "sets.h"
+#include "class/grafo.h"
+#include "class/sets.h"
 #include <list>
 #include <queue>
 #include <iostream>
+
 using namespace std;
 
 struct nodo{
@@ -18,6 +19,117 @@ struct par{
 	int a;
 	int b;
 };
+
+template <typename C> void Dijkstra ( const Grafo<C> & g , int vertice){
+
+	int n = g.devolver_longitud();
+	int calculado[n];
+	int distancia[n];
+	int padre[n];
+	int min= 9999999;
+	int PosMin;
+	list <typename Grafo<C>::Arco> lista;
+
+	distancia[vertice] = 0;
+
+	for ( int i=1;i<=n;i++){
+		calculado[i]=0;
+		padre[i]=0;
+		distancia[i]=999;
+	}
+
+	for ( int i=1 ; i <= n ; i++ ){
+
+
+		for ( int j=1;j<=n;j++){
+			if (g.costo_arco(i,j) < distancia[j] ){
+				distancia[j] = g.costo_arco(i,j);
+			}
+		}
+
+		min = 9999999;
+
+		for ( int j=1;j<=n;j++){
+			if ( (distancia[j] < min) && calculado[j] == 0 ){
+				min = distancia[j];
+				PosMin = j;
+			}
+		}
+
+		calculado[PosMin] = 1; //Agregamos Posmin a S conjunto solucion
+
+		g.devolver_adyacentes(PosMin,lista);
+		typename list<typename Grafo<C>::Arco>::iterator it = lista.begin();
+		for ( it=lista.begin() ; it!=lista.end() ; it++ ){
+			if ( calculado[(*it).devolver_adyacente()] == 0 ){ //Si no fue procesado
+				if ( distancia[(*it).devolver_adyacente()] > distancia[PosMin] + g.costo_arco(PosMin,(*it).devolver_adyacente())){
+					distancia[(*it).devolver_adyacente()] = distancia[PosMin] + g.costo_arco(PosMin,(*it).devolver_adyacente());
+					padre[(*it).devolver_adyacente()] = (*it).devolver_adyacente();
+				}
+			}
+		}
+	}
+
+	cout << "1 2 3 4 5 6 7 8 9 10\n\n";
+
+	for ( int j=1;j<=n;j++){
+		cout << calculado[j] << " ";
+	}
+	// std::cout << "\n" << '\n';
+	// for ( int j=1;j<=n;j++){
+	// 	cout << padre[j] << " ";
+	// }
+	std::cout << "\n" << '\n';
+
+	for ( int j=1;j<=n;j++){
+		cout << distancia[j] << " ";
+	}
+
+}
+
+template <typename C> void Pink_Floyd (const Grafo<C> & g,int origen,int destino){
+	int u = g.devolver_longitud() + 1;
+	int m[u][u];
+	int p[u][u];
+
+	// for ( int j = 1 ; j <= u ; j++ ){
+	// 	for ( int i = 1 ; i <= u ; i++ ){
+	// 		p[i][j] = 0;
+	// 		m [i][j] = g.costo_arco(i,j);
+	// 	}
+	// }
+
+
+	for ( int k = 0 ; k <= u ; k++ ){
+		for ( int i = 0 ; i <= u ; i++ ){
+			for ( int j = 0 ; j <= u ; j++ ){
+				int a = g.costo_arco(i,k) + g.costo_arco(k,j);
+				int b = g.costo_arco(i,j);
+				if ( a < b ){
+					m[i][j] = a;
+					p[i][j] = k;
+				}
+				else{
+					p[i][j] = 0;
+					m[i][j] = b;
+				}
+			}
+		}
+	}
+
+	// for ( int i = 1 ; i <= u ; i++ ){
+	// 	for ( int j = 1 ; j <= u ; j++ ){
+	// 		cout << p[i][j] << " ";
+	// 		}
+	// 	cout << "\n";
+	// }
+	// int n = p[origen][destino];
+	// while ( n != 0 ){
+	// 	cout << n;
+	// 	n = p[origen][n];
+	// }
+	return;
+}
 
 template <typename C> void comp_fuertemente_conectados (const Grafo<C> & g,nodo visitados[]){
 	int tiempo = 0;
@@ -100,6 +212,7 @@ template<typename C>void ejercicio8(const Grafo<C>& g,int vertice,int destino,li
 
 
 
+// solucion.insert(solucion.end(),route.begin(),route.end());
 
 template<typename C>void routes_from_to(const Grafo<C>& g,int visitados[],int vertice,int destino,list<int> & route,list<list<int>> & solucion){
 	if ( vertice == destino ){
@@ -158,6 +271,8 @@ template <typename C> void DFS_Forest(const Grafo<C> & Grafo_,nodo visitados[],b
 		v++;
 	}
 }
+
+
 
 
 #endif /* GRAFO_FUNCIONES_H_ */
