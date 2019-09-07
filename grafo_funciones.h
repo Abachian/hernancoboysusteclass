@@ -28,15 +28,18 @@ struct arcoplus{
 
 template <typename C> void Prim ( const Grafo<C> & g , int origen, int cant_arc){
 	cout << "   Arcos del Arbol Libre:" << endl;
-	set<int> vertices;
+	set<int> vertices; //todos los vertices, constante
 	vertices=g.devolver_vertices(vertices);
+	set<int> vertices_s; //todos los vertices, pero se le restarán los v en S
+	vertices_s=g.devolver_vertices(vertices-s);
 	set<int> S;
 	list<arcoplus> T;
-	int minimos[cant_arc];
+	list<int> minimos;
 	//int n = g.devolver_longitud();
 
 	while ( S != vertices){
 		S.insert(origen);
+		vertices_s.erase(origen);
 		list <typename Grafo<C>::Arco> Arcos_aux;
 		g.devolver_adyacentes(origen,Arcos_aux);
 		typename list <typename Grafo<C>::Arco>::iterator it = Arcos_aux.begin();
@@ -45,10 +48,12 @@ template <typename C> void Prim ( const Grafo<C> & g , int origen, int cant_arc)
 
 		for (it2 = Arcos_aux.begin(); it2 != Arcos_aux.end(); it2++ )
 		{
-			if (((*it2).devolver_costo() < min)  &&  (!pertenece((*it2).devolver_adyacente(),S) ) )
+			if (((*it2).devolver_costo() < min)  &&  ( vertices_s.find((*it2).devolver_adyacente()) != vertices_s.end() )
 			{
-				min=(*it2).devolver_costo();
+				min=(*it2).devolver_costo;
 				it=it2;
+				minimos.push_front(min);
+			}
 				//vertices.erase((*it2).devolver_adyacente());
 			}
 		}
