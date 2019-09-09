@@ -26,6 +26,54 @@ struct arcoplus{
 	int costo;
 };
 
+template <typename C> void Prim ( const Grafo<C> & g, int & origen){	
+	int k = 0;
+	int n = g.devolver_longitud();
+	int solucion [n];
+	int m_cercano [n];
+	int d_m_cercano [n];
+
+	for ( int j = 1 ; j <= n ; j++ ){
+		solucion[j] = 0;
+		m_cercano[j] = origen;
+		d_m_cercano[j] = g.costo_arco(origen,j);
+	}
+	solucion[origen] = 1;
+	int actual = origen;
+	while ( k <= n){ //Mientras no haya verificado todo
+		//cout << actual << " ";
+		list <typename Grafo<C>::Arco> adyacentes;
+		g.devolver_adyacentes(actual,adyacentes);
+		typename list <typename Grafo<C>::Arco> :: iterator it = adyacentes.begin();
+		while ( it != adyacentes.end() ) {
+			if ( solucion[(*it).devolver_adyacente()] == 0 ){
+				if ( g.costo_arco(actual,(*it).devolver_adyacente()) < d_m_cercano[(*it).devolver_adyacente()] ){
+					d_m_cercano[(*it).devolver_adyacente()] = g.costo_arco(actual,(*it).devolver_adyacente());
+					m_cercano[(*it).devolver_adyacente()] = actual;
+				}
+			}
+			it++;
+		}
+		int menor = BuscarMenor(d_m_cercano,solucion,n); //Cual es el menor que no tiene un 1
+		cout << "M: " << menor <<endl;
+		actual = menor;
+		solucion [ actual ] = 1;
+		k++;
+	}
+	for ( int u = 1 ; u <= n ; u++ ){
+		cout << m_cercano[u] << " ";
+	}
+	cout << endl;
+	for ( int u = 1 ; u <= n ; u++ ){
+		cout << d_m_cercano[u] << " ";
+	}
+	cout << endl;
+	for ( int u = 1 ; u <= n ; u++ ){
+		//cout << solucion[u] << " ";
+		cout << m_cercano[u] << "->" << u << "    ";
+	}
+}
+
 // template <typename C> void Prim ( const Grafo<C> & g , int origen, int cant_arc){
 // 	cout << "   Arcos del Arbol Libre:" << endl;
 // 	set<int> vertices; //todos los vertices, constante
