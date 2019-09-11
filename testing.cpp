@@ -4,6 +4,27 @@
 
 using namespace std;
 
+template <typename C>
+ostream & operator << (ostream & salida, const Grafo<C> & grafo)
+{
+	list<int> vertices;
+	grafo.devolver_vertices(vertices);
+	list<int>::iterator v = vertices.begin();
+	while (v != vertices.end()) {
+		salida << "    " << *v << "\n";
+		// Recorremos todos los adyacentes de cada vertice
+		list<typename Grafo<C>::Arco> adyacentes;
+		grafo.devolver_adyacentes(*v, adyacentes);
+		typename list<typename Grafo<C>::Arco>::iterator ady = adyacentes.begin();
+		while (ady != adyacentes.end()) {
+			salida << "    " << *v << "-> " << ady->devolver_adyacente() << " (" << ady->devolver_costo() << ")\n";
+			ady++;
+		}
+		v++;
+	}
+	return salida;
+}
+
 int main() {
   Grafo <int> g;
   // m.agregar_vertice(1);
@@ -37,7 +58,16 @@ int main() {
   g.agregar_arco(6, 7, 3);
   g.agregar_arco(8, 7, 1);
 
-  cout << "Inicio: " << '\n\n';
+  cout << "Inicio: " << "\n\n";
+
+  Grafo<int> h;
+  h = g.invertirgrafo();
+
+  cout << g;
+  cout << "JJAJAJJAJA "<< endl;
+  cout  << h;
+
+
 
   // Prim(g,1);
   // Dijkstra (g,1);

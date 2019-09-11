@@ -65,6 +65,8 @@ public:
 
 	void vaciar();
 
+	Grafo<C> invertirgrafo ();
+
 private:
 
 	map <int,map<int,C>> map_grafo;
@@ -109,9 +111,26 @@ template <typename C> Grafo<C>::~Grafo()
 
 }
 
+template <typename C> Grafo<C> Grafo<C>::invertirgrafo ()
+{
+		Grafo<C> h;
+		for ( int k = 1 ; k <= this->devolver_longitud() ; k++ ){ //Preparando nuevo grafo
+			h.agregar_vertice(k);
+		}
+		typename map <int,map<int,C>> :: iterator it;
+		for ( it = this->map_grafo.begin() ; it != this->map_grafo.end() ; it++ ){
+			typename map < int , C > :: iterator it_2;
+			for ( it_2 = it->second.begin() ; it_2 != it->second.end() ; it_2++ ){
+				h.agregar_arco((*it_2).first,(*it).first,(*it_2).second);
+			}
+		}
+		return h;
+}
+
 template <typename C> Grafo<C> & Grafo<C>::operator = (const Grafo & otroGrafo)
 {
 	this->map_grafo = otroGrafo.map_grafo;
+	return *this;
 }
 
 template <typename C> bool Grafo<C>::esta_vacio() const
