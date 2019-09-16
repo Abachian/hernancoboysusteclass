@@ -58,16 +58,8 @@ int main() {
   g.agregar_arco(6, 7, 3);
   g.agregar_arco(8, 7, 1);
 
-  cout << "Inicio: " << "\n\n";
-
-  Grafo<int> h;
-  h = g.invertirgrafo();
-
-  cout << g;
-  cout << "JJAJAJJAJA "<< endl;
-  cout  << h;
-
-
+	nodo visitados[g.devolver_longitud()];
+	comp_fuertemente_conectados(g,visitados);
 
   // Prim(g,1);
   // Dijkstra (g,1);
