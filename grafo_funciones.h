@@ -312,7 +312,7 @@ template <typename C> void DFS(const Grafo<C> & Grafo_, int vertice, nodo visita
 			visitados[destino].padre = vertice;
 			DFS(Grafo_,(*it).devolver_adyacente(),visitados,tiempo,ciclico,toposort);
 		}
-		if (visitados[destino].fin == -1){
+		if (visitados[destino].inicio != -1 && visitados[destino].fin == -1){
 			ciclico = true;
 		}
 		it++;
